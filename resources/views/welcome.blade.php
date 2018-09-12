@@ -78,19 +78,37 @@
             @endif
 
             <div class="content">
-                <div class="title m-b-md">
-                    Laravel
-                </div>
 
-                <div class="links">
-                    <a href="https://laravel.com/docs">Documentation</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
-                </div>
+                <h2>Subscribed Users</h2>
+                <ul id="users">
+                    <!--<li class="message"></li>-->
+                </ul>
+
             </div>
         </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.dev.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script>
+            var socket = io('http://rtca-laracasts.local:3000');
+
+            $(document).ready(function () {
+                function addMessage(message){
+                    $('#users').append('<li class="user">' + message + '</li>');
+                }
+
+                $('#chat').submit(function (e) {
+                    e.preventDefault();
+                    var message = $('#message').val();
+                    socket.emit('chat.message', message);
+                    $('#message').val('');
+                });
+
+                socket.on('test-channel:UserSignedUp', function (data) {
+                    addMessage(data.username);
+                });
+            });
+        </script>
+
     </body>
 </html>
