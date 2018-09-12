@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h2>Real-time Laravel with Socket.io: Hello Socket.io</h2>
+<a href="https://laracasts.com/series/real-time-laravel-with-socket-io/episodes/1">Video Lesson</a>
+
+<ul id="messages">
+    <!--<li class="message"></li>-->
+</ul>
+<form id="chat">
+    <input id="message" />
+    <button type="submit">Send</button>
+</form>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.dev.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    var socket = io();
+
+    $(document).ready(function () {
+        function addMessage(message){
+            $('#messages').append('<li class="message">' + message + '</li>');
+        }
+
+        $('#chat').submit(function (e) {
+            e.preventDefault();
+            var message = $('#message').val();
+            socket.emit('chat.message', message);
+            $('#message').val('');
+        });
+
+        socket.on('chat.message', function (message) {
+            addMessage(message);
+        });
+    });
+</script>
+
+</body>
+</html>
