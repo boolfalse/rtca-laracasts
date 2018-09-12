@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Support\Facades\Redis;
+use App\Events\UserSignedUp;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,23 +13,9 @@ use Illuminate\Support\Facades\Redis;
 |
 */
 
-Route::get('/', function () {
+Route::get('/{user_id}', function ($user_id) {
 
-    // 1. Publish event with redis
-
-    $data = [
-        'event' => 'UserSignedUp',
-        'payload' => [
-            'username' => 'John Doe',
-            'email' => 'johndoe@gmail.com'
-        ],
-    ];
-
-    // 2. Node.js + Redis subscribes to the event (setup a redis client with node js and subscribe to that channel)
-
-    Redis::publish('test-channel', json_encode($data));
-
-    // 3. Use socket.io to emit to all clients
+    event(new UserSignedUp($user_id));
 
     return view('welcome');
 });

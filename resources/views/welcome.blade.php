@@ -81,7 +81,7 @@
 
                 <h2>Subscribed Users</h2>
                 <ul id="users">
-                    <!--<li class="message"></li>-->
+                    <!--<li class="message">User ID: <span id="info"></span></li>-->
                 </ul>
 
             </div>
@@ -94,18 +94,11 @@
 
             $(document).ready(function () {
                 function addMessage(message){
-                    $('#users').append('<li class="user">' + message + '</li>');
+                    $('#users').append('<li class="message">User ID: <span id="info">' + message + '</span></li>');
                 }
 
-                $('#chat').submit(function (e) {
-                    e.preventDefault();
-                    var message = $('#message').val();
-                    socket.emit('chat.message', message);
-                    $('#message').val('');
-                });
-
-                socket.on('test-channel:UserSignedUp', function (data) {
-                    addMessage(data.username);
+                socket.on('test-channel:App\\Events\\UserSignedUp', function (data) {
+                    addMessage(data.user_id);
                 });
             });
         </script>
